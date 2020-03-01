@@ -8,9 +8,10 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <div>Läsa textfil</div>
+        <div>Läsa textfilen</div> 
         <asp:Button ID="btnReadFile" runat="server" Text="Read text From file" OnClick="btnReadFile_Click" /><br />
         <asp:Label ID="lblReadText" runat="server" ForeColor="Blue" Text=""></asp:Label><br />
+        <asp:ListBox ID="ListBox1" size="50" runat="server"></asp:ListBox>
     </form>
 </body>
 </html>

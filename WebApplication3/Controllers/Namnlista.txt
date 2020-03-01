@@ -1,6 +1,6 @@
 Jill, Sandberg, 25
-Åsa, Holmberg, 45
-Gordon, 32, Sandberg
+Åsa, 45, Holmberg
+32, Gordon, Sandberg
 Klara-Stina, Dahl, 19
 29, Saga, Ek
 Wilma, 33, Holmberg
