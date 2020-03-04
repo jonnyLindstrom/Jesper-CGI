@@ -8,10 +8,18 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <div>Läsa textfilen</div> 
-        <asp:Button ID="btnReadFile" runat="server" Text="Read text From file" OnClick="btnReadFile_Click" /><br />
-        <asp:Label ID="lblReadText" runat="server" ForeColor="Blue" Text=""></asp:Label><br />
-        <asp:ListBox ID="ListBox1" size="50" runat="server"></asp:ListBox>
+        <div>Jespers arbetsprov</div>
+        <asp:Label ID="Label1" runat="server"/>
+
+        <asp:Button ID="btnSortFirstName" runat="server" Text="Sortera på förnamn" OnClick="btnSortFirstName_Click" />
+        <asp:Button ID="btnSortByAge" runat="server" Text="Sortera på ålder" OnClick="btnSortAge_Click" />
+        
+        <asp:Button ID="btnNext" runat="server" Text="next" OnClick="btnNext_Click" />
+        <asp:Button ID="btnPrev" runat="server" Text="prev" OnClick="btnPrev_Click" />
+        <br />
+        <asp:Label ID="lblReadText" runat="server" ForeColor="Blue" Text=""></asp:Label><br/>
+        <asp:ListBox ID="ListBox1" height="100%" width="200px" size="50" runat="server" Rows="65"></asp:ListBox>
+
     </form>
 </body>
 </html>
