@@ -5,7 +5,7 @@ using System.Web;
 
 namespace WebApplication3.Controllers
 {
-    public class Person
+    public class Person //: IEquatable<Person>
     {
         public String firstName;
         public String lastName;

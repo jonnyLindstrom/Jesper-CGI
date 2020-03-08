@@ -96,6 +96,48 @@ namespace WebApplication3.Controllers
                 lblReadText.Text = "Could not read from the file, the errormessage is: " + ex.ToString();
             }
         }
+
+        protected void btnSavePersonToFile_Click(object sender, EventArgs e)
+        {
+            string line = TextBoxFirstName.Text + "," + TextBoxLastName.Text + "," + TextBoxAge.Text;
+            using (StreamWriter w = File.AppendText(Server.MapPath("Namnlista.txt")))
+            {
+                w.WriteLine(line);
+            }
+        }
+
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+            int valueSearch;
+            
+            if (TextBoxSearch.Text.Trim().Length == 0) { return; } //dont accept blank input
+
+            List<Person> people = new List<Person>(); //create people object
+            people = (List<Person>)Session["sPeople"]; //fetch people list from session
+            //string searchText = TextBoxSearch.Text;
+            bool isNumber = int.TryParse(TextBoxSearch.Text, out valueSearch); //number search?
+
+            ListBox1.Items.Clear();
+            if (isNumber) {
+                foreach (Person per in people)
+                {
+                    if (valueSearch == per.age)
+                    {
+                        ListBox1.Items.Add(per.firstName + " - " + per.lastName + " - " + per.age);
+                    }
+                }
+            }
+            else {
+                foreach (Person per in people)
+                {
+                    if (per.firstName.ToLower().Contains(TextBoxSearch.Text.ToLower()) || per.lastName.ToLower().Contains(TextBoxSearch.Text.ToLower()))
+                    {
+                        ListBox1.Items.Add(per.firstName + " - " + per.lastName + " - " + per.age);
+                    }
+                }
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if ((string)Session["Page"] != "FileLoaded") {  //only load file once

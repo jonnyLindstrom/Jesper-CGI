@@ -59,3 +59,6 @@ Tim, Svensson, 30
 Idun, Svensson, 40
 25, Ola, Johansson
 20, Chanel
+Jonny,Nilsson,50
+Jenny,Nilsson,33
+Jenny,Nilsson,33
