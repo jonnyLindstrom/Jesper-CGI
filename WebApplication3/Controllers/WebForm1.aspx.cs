@@ -99,6 +99,17 @@ namespace WebApplication3.Controllers
 
         protected void btnSavePersonToFile_Click(object sender, EventArgs e)
         {
+            int age;
+            //validate input
+            if (TextBoxFirstName.Text.Trim().Length == 0 || TextBoxLastName.Text.Trim().Length == 0) { 
+                lblReadText.Text = "Förnamn samt efternamn måste innehålla bokstäver";
+                return;
+            }
+            bool isNumber = int.TryParse(TextBoxAge.Text, out age);
+            if (!isNumber || age<1 || age>150) { 
+                lblReadText.Text = "Ålder får endast ligga mellan 1-150"; 
+                return; 
+            }
             string line = TextBoxFirstName.Text + "," + TextBoxLastName.Text + "," + TextBoxAge.Text;
             using (StreamWriter w = File.AppendText(Server.MapPath("Namnlista.txt")))
             {
@@ -114,7 +125,7 @@ namespace WebApplication3.Controllers
 
             List<Person> people = new List<Person>(); //create people object
             people = (List<Person>)Session["sPeople"]; //fetch people list from session
-            //string searchText = TextBoxSearch.Text;
+
             bool isNumber = int.TryParse(TextBoxSearch.Text, out valueSearch); //number search?
 
             ListBox1.Items.Clear();

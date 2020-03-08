@@ -62,3 +62,4 @@ Idun, Svensson, 40
 Jonny,Nilsson,50
 Jenny,Nilsson,33
 Jenny,Nilsson,33
+Karin,Månsdotter,10

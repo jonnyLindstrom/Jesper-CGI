@@ -19,6 +19,8 @@
         
         <asp:Button ID="btnNext" runat="server" Text="next" OnClick="btnNext_Click" />
         <asp:Button ID="btnPrev" runat="server" Text="prev" OnClick="btnPrev_Click" />
+
+
         <asp:TextBox ID="TextBoxFirstName" runat="server">Förnamn</asp:TextBox>
         <asp:TextBox ID="TextBoxLastName" runat="server">Efternamn</asp:TextBox>
         <asp:TextBox ID="TextBoxAge" runat="server">Ålder</asp:TextBox>
