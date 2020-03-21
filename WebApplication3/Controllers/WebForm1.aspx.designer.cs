@@ -24,13 +24,22 @@ namespace WebApplication3.Controllers
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
-        /// Label1 control.
+        /// lblText control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label Label1;
+        protected global::System.Web.UI.WebControls.Label lblText;
+
+        /// <summary>
+        /// ScriptManager1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.ScriptManager ScriptManager1;
 
         /// <summary>
         /// TextBoxSearch control.
@@ -42,6 +51,15 @@ namespace WebApplication3.Controllers
         protected global::System.Web.UI.WebControls.TextBox TextBoxSearch;
 
         /// <summary>
+        /// AutoCompleteExtender1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.AutoCompleteExtender AutoCompleteExtender1;
+
+        /// <summary>
         /// btnSearch control.
         /// </summary>
         /// <remarks>
@@ -49,6 +67,15 @@ namespace WebApplication3.Controllers
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSearch;
+
+        /// <summary>
+        /// Label1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label1;
 
         /// <summary>
         /// btnSortFirstName control.
@@ -121,6 +148,15 @@ namespace WebApplication3.Controllers
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSavePersonToFile;
+
+        /// <summary>
+        /// btnSaveListToExcel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSaveListToExcel;
 
         /// <summary>
         /// lblReadText control.

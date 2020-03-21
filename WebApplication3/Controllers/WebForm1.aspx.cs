@@ -12,89 +12,160 @@ using System.Web.Security;
 using System.Web.UI.WebControls.WebParts;
 using System.Web.UI.HtmlControls;
 using System.IO;
+using System.Web.Services;
+using System.Web.Script.Services;
 
-
-
-namespace WebApplication3.Controllers
-{
+namespace WebApplication3.Controllers {
+    
     public partial class WebForm1 : System.Web.UI.Page
     {
-        public void LoadFile()
+        [WebMethod]
+        public static string[] GetNames(string prefix)
+        {
+            List<string> names = new List<string>();
+            //logic
+            return names.ToArray();
+        }
+
+
+        public void LoadFile() //Read file and populate session object
         {
             try
             {
                 List<Person> people = new List<Person>();
                 using (StreamReader Reader = File.OpenText(Server.MapPath("Namnlista.txt")))
                 {
-                    string[] read;
-                    //int i = 0;
+                    string[] readLine;
                     int v;
-                    char[] seperators = { ',' };
+                    char[] seperators = { ',' }; //CSV file
                     string sFirstName = "";
                     string sLastName = "";
                     int iAge = 0;
+                    int iPos = 4;
                     string data;
+                    bool isIntPos0, isIntPos1, isIntPos2 = false;
 
-                    while ((data = Reader.ReadLine()) != null)
+                    while ((data = Reader.ReadLine()) != null) //read file line by line until EOF
                     {
-                        read = data.Split(seperators, StringSplitOptions.RemoveEmptyEntries);
+                        readLine = data.Split(seperators, StringSplitOptions.RemoveEmptyEntries);
 
-                        bool isIntPos0 = int.TryParse(read[0], out v); //is integer?
-                        if (isIntPos0)
-                        { //integer in first column
-                            iAge = v; //age
-                            sFirstName = read[1]; //first name
-                            if (read.Length > 2)
+                        //find age column position in readLine
+                        isIntPos0 = int.TryParse(readLine[0], out v);
+                        isIntPos1 = int.TryParse(readLine[1], out v);
+                        if (readLine.Length > 2) { // to avoid exception if only 2 colummns
+                            isIntPos2 = int.TryParse(readLine[2], out v);
+                        };
+                        if (isIntPos0) iPos = 0;
+                        if (isIntPos1) iPos = 1;
+                        if (isIntPos2) iPos = 2;                        
+                        
+                        switch (iPos) //age column position in readLine
+                        {
+                            case 0: //age in column 0
+                                {
+                                    iAge = v;
+                                    sFirstName = readLine[1]; 
+                                    if (readLine.Length > 2) sLastName = readLine[2]; 
+                                    break;
+                                }
+                            case 1: //age in column 1
+                                { 
+                                    iAge = v; 
+                                    sFirstName = readLine[0]; 
+                                    if (readLine.Length > 2) sLastName = readLine[2]; 
+                                    break;
+                                }
+                            case 2: //age in column 2
+                                { 
+                                    if (readLine.Length > 2) iAge = v; 
+                                    sFirstName = readLine[0]; 
+                                    sLastName = readLine[1]; 
+                                }
+                                break;
+                            default:
+                                // Should not come here, error
+                                throw new System.InvalidProgramException("Should not be here!!");
+                        }                       
+                        /*if (isIntPos0)
+                        { //age in first column
+                            iAge = v; 
+                            sFirstName = readLine[1]; //first name
+                            if (readLine.Length > 2) //verify we have 3 values in row
                             {
-                                sLastName = read[2]; //last name
+                                sLastName = readLine[2]; //last name
                             }
-                        }
+                        }*/
 
-                        bool isIntPos1 = int.TryParse(read[1], out v); //is integer?
-                        if (isIntPos1)
+                        //bool isIntPos1 = int.TryParse(readLine[1], out v); //is integer?
+                        /*if (isIntPos1)
                         { //integer in second column
                             iAge = v; //age
-                            sFirstName = read[0]; //first name
-                            if (read.Length > 2)
+                            sFirstName = readLine[0]; //first name
+                            if (readLine.Length > 2)
                             {
-                                sLastName = read[2]; //last name
+                                sLastName = readLine[2]; //last name
                             }
-                        }
+                        }*/
 
-                        if (read.Length > 2) //does third column exist
+                        /*if (readLine.Length > 2) //does third column exist
                         {
-                            bool isIntPos2 = int.TryParse(read[2], out v); //is integer?
+                            //bool isIntPos2 = int.TryParse(readLine[2], out v); //is integer?
                             if (isIntPos2)
                             { //integer in third column
-                                if (read.Length > 2)
+                                if (readLine.Length > 2)
                                 {
                                     iAge = v; //age
                                 } //age
-                                sFirstName = read[0]; //first name
-                                sLastName = read[1]; //last name
+                                sFirstName = readLine[0]; //first name
+                                sLastName = readLine[1]; //last name
                             }
-                        }
-                        people.Add(new Person(sFirstName, sLastName, iAge));
+                        }*/
+                        people.Add(new Person(sFirstName, sLastName, iAge)); // add person to people object
+                    }
+                    Session["sPeople"] = people; //Populate sessionobject to be used going forward
+
+                    //List 10 first person in list
+                    Session["DisplayStart"] = 0; //position of first person to list 
+                    Label1.Text = "DisplayStart= " + Session["DisplayStart"]; //debug
+
+                    int startValue = Convert.ToInt32(Session["DisplayStart"]); //start list from this position
+                    int endValue = startValue + 9;
+                    int i;
+                    //lblText.Text = "<table><tr><td>FirstName</td><td>LastName</td><td>Age</td></tr>";
+                    //contentDiv.InnerHtml = "<table><tr><td>FirstName</td><td>LastName</td><td>Age</td></tr>"; //starta tabell m rubrik
+                    for (i = startValue; i < endValue; i++)
+                    {
+                        ListBox1.Items.Add(people[i].firstName.ToString() + " - " + people[i].lastName + " - " + people[i].age);
                     }
 
-                    Session["DisplayStart"] = 0; //set start value
-                    Label1.Text = "DisplayStart= " + Session["DisplayStart"];
-                    int i = 0;
-                    foreach (Person per in people)
+                    /*foreach (Person per in people)
                     {
                         if (i < 10) //list 10 persons
                         {
                             ListBox1.Items.Add(per.firstName + " - " + per.lastName + " - " + per.age);
+                            //ListItem1.Text = per.firstName;
+                            //ListItem2.Text = per.lastName;
+                            //ListItem3.Text = per.age.ToString();
+                            //contentDiv.InnerHtml += "<tr><td class=\"klassnamn\">" + per.firstName + "</td><td>" + per.lastName + "</td><td>" + per.age + "</td></tr>";
+                            //lblText.Text += "<tr><td class=\"klassnamn\">" + per.firstName + "</td><td>" + per.lastName + "</td><td>" + per.age + "</td></tr>";
                         }
                         i++;
-                    }
-                    Session["sPeople"] = people;
+                    }*/
+
+                    //contentDiv.InnerHtml += "</ table >"; //stäng tabell
+                    //lblText.Text += "</ table >"; //stäng tabell
+                    Session["sPeople"] = people; //Populate sessionobject to be used going forward
                 }
             }
             catch (Exception ex)
             {
                 lblReadText.Text = "Could not read from the file, the errormessage is: " + ex.ToString();
             }
+        }
+
+        protected void btnSaveListToExcel_Click(object sender, EventArgs e)
+        {
+            //need to have excel/office installed and use API's
         }
 
         protected void btnSavePersonToFile_Click(object sender, EventArgs e)

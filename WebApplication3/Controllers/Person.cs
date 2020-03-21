@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace WebApplication3.Controllers
-{
-    public class Person //: IEquatable<Person>
+
+namespace WebApplication3.Controllers{
+    public class Person
     {
         public String firstName;
         public String lastName;
@@ -18,4 +18,6 @@ namespace WebApplication3.Controllers
             this.age = age;
         }
     }
+
+
 }
