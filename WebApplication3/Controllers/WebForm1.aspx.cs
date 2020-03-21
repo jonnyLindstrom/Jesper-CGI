@@ -27,8 +27,45 @@ namespace WebApplication3.Controllers {
             return names.ToArray();
         }
 
+        public void ListPersons ()
+        {
+            List<Person> people = new List<Person>(); //create people object
+            people = (List<Person>)Session["sPeople"]; //fetch from session
+            int i; //counter
+            int startValue = Convert.ToInt32(Session["DisplayStart"]);
+            if (startValue > Convert.ToInt32(Session["PersonsInList"]))
+            { //stopValue not allowed to be higher that no of persons in list
+                return; // no persons to show
+            }
 
-        public void LoadFile() //Read file and populate session object
+            int stopValue = Convert.ToInt32(Session["DisplayStop"]);
+            if (stopValue > Convert.ToInt32(Session["PersonsInList"])) { //stopValue not allowed to be higher that no of persons in list
+                stopValue = Convert.ToInt32(Session["PersonsInList"]);
+            }
+            ListBox1.Items.Clear(); //empty listbox
+            for (i = startValue; i < stopValue; i++)
+            {
+                ListBox1.Items.Add(people[i].firstName.ToString() + " - " + people[i].lastName + " - " + people[i].age);
+            }
+
+            //enable or disable Prev o Next buttons
+            if(startValue <= 0) { 
+                btnPrev.Enabled = false;
+            } else
+            {
+                btnPrev.Enabled = true;
+            }
+
+            if (stopValue >= Convert.ToInt32(Session["PersonsInList"]))
+            {
+                btnNext.Enabled = false;
+            } else
+            {
+                btnNext.Enabled = true;
+            }
+        }
+
+        public void LoadFile() //Read file, populate session object, list first 10 persons
         {
             try
             {
@@ -122,22 +159,25 @@ namespace WebApplication3.Controllers {
                         }*/
                         people.Add(new Person(sFirstName, sLastName, iAge)); // add person to people object
                     }
+                    //now file is loaded into people object
+                    //store people object into session object for use going forward
                     Session["sPeople"] = people; //Populate sessionobject to be used going forward
-
+                    Session["PersonsInList"] = people.Count;
                     //List 10 first person in list
                     Session["DisplayStart"] = 0; //position of first person to list 
+                    Session["DisplayStop"] = 9; 
                     Label1.Text = "DisplayStart= " + Session["DisplayStart"]; //debug
-
-                    int startValue = Convert.ToInt32(Session["DisplayStart"]); //start list from this position
-                    int endValue = startValue + 9;
-                    int i;
-                    //lblText.Text = "<table><tr><td>FirstName</td><td>LastName</td><td>Age</td></tr>";
-                    //contentDiv.InnerHtml = "<table><tr><td>FirstName</td><td>LastName</td><td>Age</td></tr>"; //starta tabell m rubrik
+                    //int startValue = Convert.ToInt32(Session["DisplayStart"]); //start list from this position
+                    //int stopValue = startValue + 9;
+                    ListPersons();
+                    /*int i;
                     for (i = startValue; i < endValue; i++)
                     {
                         ListBox1.Items.Add(people[i].firstName.ToString() + " - " + people[i].lastName + " - " + people[i].age);
-                    }
-
+                    }*/
+                    
+                    //lblText.Text = "<table><tr><td>FirstName</td><td>LastName</td><td>Age</td></tr>";
+                    //contentDiv.InnerHtml = "<table><tr><td>FirstName</td><td>LastName</td><td>Age</td></tr>"; //starta tabell m rubrik
                     /*foreach (Person per in people)
                     {
                         if (i < 10) //list 10 persons
@@ -151,10 +191,9 @@ namespace WebApplication3.Controllers {
                         }
                         i++;
                     }*/
-
                     //contentDiv.InnerHtml += "</ table >"; //stäng tabell
                     //lblText.Text += "</ table >"; //stäng tabell
-                    Session["sPeople"] = people; //Populate sessionobject to be used going forward
+                    //Session["sPeople"] = people; //Populate sessionobject to be used going forward
                 }
             }
             catch (Exception ex)
@@ -294,28 +333,45 @@ namespace WebApplication3.Controllers {
         }
         protected void btnNext_Click(object sender, EventArgs e)
         {
-            List<Person> people = new List<Person>(); //create people object
-            people = (List<Person>)Session["sPeople"]; //fetch from session
-            
-            ListBox1.Items.Clear();
-            int start = (int)Session["DisplayStart"] + 10;
-            int i = 0;
-            int stop = start + 9;
-            foreach (Person per in people)
+            //List<Person> people = new List<Person>(); //create people object
+            //people = (List<Person>)Session["sPeople"]; //fetch from session
+
+            //ListBox1.Items.Clear();
+            //int start = (int)Session["DisplayStart"] + 10;
+            //int i = 0;
+            //int stop = start + 9;
+
+            //List next 10 persons in list
+            //Session["DisplayStart"] = 0; //debug varför har jag denna? 
+            //Label1.Text = "DisplayStart= " + Session["DisplayStart"]; //debug
+            //int startValue = Convert.ToInt32(Session["DisplayStart"]); //start list from this position
+            //int endValue = startValue + 9;
+
+            /*for (i = startValue; i < endValue; i++)
+            {
+                ListBox1.Items.Add(people[i].firstName.ToString() + " - " + people[i].lastName + " - " + people[i].age);
+            }*/
+
+            /*foreach (Person per in people)
             {
                 if (i >= start && i <= stop)
                 {
                     ListBox1.Items.Add(per.firstName + " - " + per.lastName + " - " + per.age);
                 }
                 i++;
-            }
-            Session["sPeople"] = people; //update session w sorted list
-            Session["DisplayStart"] = (int)Session["DisplayStart"] + 10; //update with current display
-            Label1.Text = "DisplayStart= " + Session["DisplayStart"];
+            }*/
+            //Session["sPeople"] = people; //update session w sorted list
+            if ((int)Session["DisplayStart"] <= (int)Session["PersonsInList"])
+            {
+                Session["DisplayStart"] = (int)Session["DisplayStart"] + 10; //update with current display
+                Session["DisplayStop"] = (int)Session["DisplayStop"] + 10; //update with current display
+                //Label1.Text = "DisplayStart= " + Session["DisplayStart"];
+                ListPersons();
+            }    
         }
         protected void btnPrev_Click(object sender, EventArgs e)
         {
-            List<Person> people = new List<Person>(); //create people object
+            /*List<Person> people = new List<Person>(); //create people object
             people = (List<Person>)Session["sPeople"]; //fetch from session
 
             ListBox1.Items.Clear();
@@ -332,7 +388,13 @@ namespace WebApplication3.Controllers {
             }
             Session["sPeople"] = people; //update session w sorted list
             Session["DisplayStart"] = (int)Session["DisplayStart"] - 10; //update with current display
-            Label1.Text = "DisplayStart= " + Session["DisplayStart"];
+            Label1.Text = "DisplayStart= " + Session["DisplayStart"];*/
+
+            if ((int)Session["DisplayStart"] >= 10) {  // make sure we are within list
+                Session["DisplayStart"] = (int)Session["DisplayStart"] - 10; //update with current display
+                Session["DisplayStop"] = (int)Session["DisplayStop"] - 10; //update with current display
+                ListPersons();
+            }
         }
     }
 }
